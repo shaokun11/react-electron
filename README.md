@@ -14,8 +14,6 @@ npm run build && npm run electron
 ```
 #### 打包(仅在mac电脑上可行)  
 ```javascript
-//如安装过可跳过
-npm install electron-build -g    
 npm run packager  
 cd dist && ls -al
 ```

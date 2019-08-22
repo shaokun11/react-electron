@@ -2,23 +2,29 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const reducer = (state,action)=>{
+  switch(action.type){
+    case "action_add":
+      return {...state,count:state.count + 1};
+    case "action_sub":
+      return {...state,count:state.count - 1};
+    default:
+      return state;
+  }
+}
+
 function App() {
+  const [state,dispatch] = React.useReducer(reducer,{count:0})
+  const btnClick = type=> ()=> dispatch({type})
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <p> {state.count} </p>
+        <button onClick={btnClick("action_add")}>
+          add 
+        </button>
+        <button onClick={btnClick("action_sub")}>
+          sub
+        </button>
     </div>
   );
 }
