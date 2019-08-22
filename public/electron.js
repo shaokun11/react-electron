@@ -96,7 +96,7 @@ function createWindow() {
     });
     setupMenu()
     // 加载网页之后，会创建`渲染进程`
-    mainWindow.loadURL("http://localhost:3000/");
+    mainWindow.loadURL(startUrl);
 
     // 打开chrome浏览器开发者工具.
     if (startUrl.startsWith('http')) {
