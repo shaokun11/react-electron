@@ -1,19 +1,21 @@
 {
-  "name": "electron-learn1",
+  "name": "react-electron",
   "version": "0.1.0",
-  "main": "",
+  "main": "./public/electron.js",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1"
+    "react-dom": "^16.9.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "release-mac": "electron-builder --mac"
+    "electron": "electron .",
+    "electron-dev": "ELECTRON_START_URL=http://localhost:3000/ electron .",
+    "packager": "npm run build && rm -rf dist && electron-builder --mac"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,6 +34,19 @@
   },
   "devDependencies": {
     "electron": "^6.0.3",
-    "electron-builder": "^21.2.0"
+    "image-size": "^0.7.4",
+    "react-scripts": "3.1.1",
+    "url": "^0.11.0"
+  },
+  "build": {
+    "productName": "example",
+    "appId": "com.example.server",
+    "files": [
+      "build/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "public"
+    }
   }
 }
