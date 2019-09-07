@@ -8,11 +8,15 @@ const Menu = electron.Menu;
 
 const path = require('path');
 const url = require('url');
+const ipc = electron.ipcMain
+let mainWindow;
+
+ipc.on('app close window', (sys, msg) => {
+    console.log(sys, msg)
+    mainWindow.close()
+})
 
 console.log(platform);
-
-
-let mainWindow;
 
 const setupMenu = () => {
     const menu = new Menu();
@@ -21,9 +25,9 @@ const setupMenu = () => {
     const template = [{
         label: "Application",
         submenu: [{
-                label: "About Application",
-                selector: "orderFrontStandardAboutPanel:"
-            },
+            label: "About Application",
+            selector: "orderFrontStandardAboutPanel:"
+        },
             {
                 type: "separator"
             },
@@ -38,10 +42,10 @@ const setupMenu = () => {
     }, {
         label: "Edit",
         submenu: [{
-                label: "Undo",
-                accelerator: "CmdOrCtrl+Z",
-                selector: "undo:"
-            },
+            label: "Undo",
+            accelerator: "CmdOrCtrl+Z",
+            selector: "undo:"
+        },
             {
                 label: "Redo",
                 accelerator: "Shift+CmdOrCtrl+Z",
@@ -82,8 +86,10 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            webSecurity: false, // 这样可以在 webview 中加载/显示本地计算机的图片。
-        }
+            nodeIntegration: true,  //允许使用node的方式引入
+            webSecurity: false, // 允许使用本地资源
+        },
+        backgroundColor: '#B1FF9D',
     });
 
     // 这里要注意一下，这里是让浏览器窗口加载网页。
@@ -101,9 +107,8 @@ function createWindow() {
     // 打开chrome浏览器开发者工具.
     if (startUrl.startsWith('http')) {
         mainWindow.webContents.openDevTools();
-
     }
-
+    mainWindow.webContents.openDevTools();
     mainWindow.on('closed', function () {
         mainWindow = null
     });
