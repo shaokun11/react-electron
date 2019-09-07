@@ -7,10 +7,12 @@ cd react-electron && npm i
 ```javascript
 npm start 
 npm run electron-dev
+// 备注,如果在开发模式中使用了ipc通信,则直接在浏览器中打开网页是会报错的,在app中打开即可
 ```
 #### 生产模式  
 ```javascript
-npm run build && npm run electron
+npm run build 
+npm run electron
 ```
 #### 打包(仅在mac电脑上可行)  
 ```javascript
