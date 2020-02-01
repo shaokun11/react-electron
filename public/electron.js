@@ -1,5 +1,5 @@
 const electron = require('electron');
-const platform = require('os').platform(); // 获取平台：https://nodejs.org/api/os.html#os_os_platform
+const platform = require('os').platform();
 // 控制app生命周期.
 const app = electron.app;
 // 浏览器窗口.
