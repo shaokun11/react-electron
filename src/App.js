@@ -1,12 +1,13 @@
-import React, {Suspense, useEffect} from "react"
+import React, {useCallback, useEffect, useReducer, useState} from "react"
 import "./App.css"
 import Api from "./utils/api"
 import {Button, Spin} from "antd"
-import useSWR from "swr/esm/use-swr"
+import {useAsync} from "react-use"
+import Loading from "./component/loading"
+import Error from "./component/error"
 
 const electron = window.require("electron")
-const ipc = electron.ipcRenderer
-
+const ipcRenderer = electron.ipcRenderer
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -19,24 +20,42 @@ const reducer = (state, action) => {
   }
 }
 
-function Test() {
-  const {data} = useSWR("posts/1", () => {
-    return Api.post("posts", {name: "shaokun"})
-  }, {suspense: true})
-
-  if (data === "requestError") {
-    return <div>{"something error"}</div>
-  }
-  return <div>{data.name}</div>
+const PostComponent = ({url, body}) => {
+  const state = useAsync(async () => {
+    return await Api.post(url, body)
+  }, [url])
+  if (state.loading) return <Loading/>
+  if (state.error) return <Error error={state.error}/>
+  return <div>name:{state.value.name}</div>
 }
 
-
 function App() {
-  const [state, dispatch] = React.useReducer(reducer, {count: 0})
+  const [state, dispatch] = useReducer(reducer, {count: 0})
+  const [remoteState, dispatchRemoteState] = useState({
+    name: "shaokun",
+    age: 18,
+    body: ""
+  })
   const btnClick = type => () => dispatch({type})
   const sendClick = () => {
-    ipc.send("app close window", "hello world, please close window")
+    ipcRenderer.send("app close window", "hello world, please close window")
   }
+  const getUserInfo = () => {
+    ipcRenderer.send("userInfo")
+  }
+
+  const listener = useCallback(() => {
+    ipcRenderer.on("userInfo", function (event, msg) {
+      dispatchRemoteState(v => ({
+        v, ...msg
+      }))
+    })
+  }, [])
+
+  useEffect(() => {
+    listener()
+  }, [])
+
   return (
     <div className="App">
       <p> {state.count} </p>
@@ -55,11 +74,20 @@ function App() {
         onClick={sendClick}>
         send msg
       </Button>
-      <div>
-        <Suspense fallback={<Spin/>}>
-          <Test/>
-        </Suspense>
-      </div>
+
+      <Button
+        type={"primary"}
+        onClick={getUserInfo}>
+        get user info
+      </Button>
+      <ul>
+        <li>name:{remoteState.name}</li>
+        <li>age:{remoteState.age}</li>
+        <li>age:{remoteState.body}</li>
+      </ul>
+      <PostComponent
+        url={"posts"}
+        body={{name: "shaokun"}}/>
     </div>
   )
 }
