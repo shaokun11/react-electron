@@ -112,7 +112,6 @@ function createWindow() {
   if (startUrl.startsWith("http")) {
     mainWindow.webContents.openDevTools()
   }
-  mainWindow.webContents.openDevTools()
   mainWindow.on("closed", function () {
     mainWindow = null
   })

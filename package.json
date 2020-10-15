@@ -24,7 +24,9 @@
     "build": "react-app-rewired build",
     "electron": "electron .",
     "electron-dev": "ELECTRON_START_URL=http://localhost:3000/ electron .",
-    "packager": "npm run build && rm -rf dist && electron-builder -m"
+    "electron-dev-win": "set ELECTRON_START_URL=http://localhost:3000/ &&electron .",
+    "packager": "npm run build && rm -rf dist && electron-builder -m",
+    "packager-win": "npm run build && rm -rf dist && electron-builder -w"
   },
   "eslintConfig": {
     "extends": "react-app"
