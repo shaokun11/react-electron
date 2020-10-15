@@ -72,7 +72,7 @@ function App() {
       <Button
         type={"primary"}
         onClick={sendClick}>
-        send msg
+        close window
       </Button>
 
       <Button
